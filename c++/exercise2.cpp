@@ -1,3 +1,19 @@
+/*
+Implementing element-wise sum of vectors parallely and logging individual steps.
+
+Function elementsum()
+    Sums the provided elements and stores the value in reference to the results vector.
+    Parameters:
+         second (element from second vector)
+         result (reference of indexed element of vector where sum is returned)
+
+Function logsum()
+    Prints the log details of the index whose values were added last.
+    Parameters:
+        num (Index where addition happened last)
+
+*/
+
 #include<bits/stdc++.h>
 
 using namespace std;
