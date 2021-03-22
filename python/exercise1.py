@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
 
+'''
+Python script for CLI tool which accepts absolute path of dummy.py file and then imports it relatively.
+
+Function absoluter()
+    Parameters:
+        args (Contains the path of the file from command line arguments)
+    Finds the relative path for the file with respect to the file path and then imports it relatively.
+
+CLI Instructions
+$ ./exercise1.py --help
+usage: exercise1.py [-h] [--path PATH]
+
+Absoluter - Loading a Python module relatively when absolute path is given
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --path PATH, -p PATH  Enter Absolute path of your dummy file
+
+'''
+
 import argparse
 import sys
 import os
