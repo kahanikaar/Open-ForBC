@@ -12,6 +12,14 @@ Function logsum()
     Parameters:
         num (Index where addition happened last)
 
+Function sum()
+    For adding the vectors element wise parallely and log the results from different thread and returning the resulting vector.
+    Parameters:
+        first: First vector to be added referenced
+        second: Second vector to be added referenced
+    Returns: Resulting vector after sum
+    Return type: template type
+
 */
 
 #include<bits/stdc++.h>

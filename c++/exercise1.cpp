@@ -1,5 +1,7 @@
 /*
 Implementing Cache Class for strong key,value pairs where value can be different data-types and data-structures and maintaining LRU.
+Appropriate examples are provided in the main() function to implement cache on characters, vectors and vector of vectors.
+Uses a template class to declare the cache class which is capable of handling data of any data-type.
 
 Class Cache {
 	Constructor Cache() :
@@ -10,12 +12,37 @@ Class Cache {
 	Function getter() :
 	    Used to get the value against a key, if cache-hit, the value ios returned.
 		Parameters:
-	        key : Key for the cache
+	        dataArray : The data array from where values will be taken for caching
+			key : Key for the cache
+        Returns: Value for provided key, if cache hit, fetches directly from the cache, if cache miss, sets the value in the cache and then returns
+		Return type: Template type
+
 	Function setter() :
 	    Used to set the value in cache against the key provided.
 		Parameters:
 		    key:  Key for the cache
 			value:  Value for the cache
+		Returns: Void- Just sets the value for the key provided and updates the LRU. If size of cache is full, then removes the least used value.
+
+	Function use():
+	    Used to modify the hash map where keys and iterator to the values referenced by the keys are stored.
+		Calling this will make the recently used value to reside in the first place of the dequeue and
+		repositioning subsequent values.
+		Parameters:
+		    it: Iterator to the dequeue where hash is stored
+
+	Data Member size:
+	    For storing the size of the cache
+		Type: int
+
+	Data Member cacheData:
+	    For storing the key value pairs of the cache.
+		Type: Unordered map for <key, <value, key iterator>>
+
+	Data Member LRU:
+	    For storing the keys for the cache from where the functions are called for checking cache hit or cache miss,
+		Type: Dequeue of type int
+
 
 }
 */
@@ -33,11 +60,17 @@ public:
 	}
 
 	// For gettting values stored in cash using the key
-	T getter(int key) {
+	T getter(vector<T> dataArray, int key) {
 		auto item = cacheData.find(key);
+
+		if (item == cacheData.end()) {
+			this->setter(key,dataArray[key]);
+			item = cacheData.find(key);
+		}
 		use(item);
 		return item->second.first;
 	}
+
 
 	// For settting values in the cache
 	void setter(int key, T value) {
@@ -65,7 +98,7 @@ public:
 		LRU.erase(it->second.second);
 		LRU.push_front(it->first);
 		it->second.second = LRU.begin();
-	}
+	}about:preferences#search
 
 private:
 	int size;
@@ -78,16 +111,20 @@ private:
 
 int main() {
 
-//Using the class for storing character values.
-char alphabet[26] {};
-iota(begin(alphabet), end(alphabet), 'A');
 
+
+//Using the Cache for storing character values.
+vector<char> alphabet(27);
+iota(alphabet.begin()+1, alphabet.end(), 'A');
 Cache<char> cache1(5);
 cache1.setter(1, alphabet[1]);
 cache1.setter(2, alphabet[2]);
-std::cout << cache1.getter(4) << std::endl;
+std::cout << cache1.getter(alphabet,4) << std::endl;
 
-//Using the class for storing vectors.
+
+
+
+//Using the Cache for storing vectors.
 vector<vector<int>> vec{ { 1, 2, 3 },
                          { 4, 5, 6 },
                          { 7, 8, 9, 4 } };
@@ -96,9 +133,35 @@ Cache<vector<int>> cache2(5);
 cache2.setter(1, vec[0]);
 cache2.setter(2, vec[1]);
 vector<int>a;
-a=cache2.getter(1);
+a=cache2.getter(vec,1);
 for(int i=0; i < a.size(); i++)
 std::cout << a.at(i) << ' ';
 
+
+
+
+//Using the Cache for storing vector of vectors.
+vector< vector< vector<int> > > vect(3, vector< vector<int> >(3 , vector<int>(3)));
+for(int i=0;i<3;++i){
+        for(int j=0;j<3;++j){
+            for(int k=0;k<3;++k){
+                vect[i][j][k] = i*3*3 + j*3 + k;
+            }
+        }
+    }
+Cache<vector<vector<int>>> cache3(5);
+cache3.setter(1, vect[0]);
+cache3.setter(2, vect[1]);
+vector<vector<int>>b;
+
+b=cache3.getter(vect,1);
+for(int p=0; p < b.size(); p++)
+{
+	for(int q=0; q < b.at(0).size(); q++ )
+    std::cout << b[p][q] << ' ';
+    cout<<"\n";
+}
+
 return 0;
+
 }
